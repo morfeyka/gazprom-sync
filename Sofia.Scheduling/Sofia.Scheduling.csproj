@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{327833CD-9441-442B-B791-495C54613178}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sofia.Scheduling</RootNamespace>
+    <AssemblyName>Sofia.Scheduling</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\packages\NHibernate.3.3.1.4000\lib\Net35\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Npgsql">
+      <HintPath>..\..\..\Lib\npgsql\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="Npgsql.EntityFramework">
+      <HintPath>..\..\..\Lib\npgsql\Npgsql.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.DataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=x86" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\ScheduleInstance.cs" />
+    <Compile Include="Core\SchedulingComleteEventHandler.cs" />
+    <Compile Include="Core\SchedulingEventHandler.cs" />
+    <Compile Include="Core\SсhedulingComletionEventArgs.cs" />
+    <Compile Include="Core\SсhedulingEventArg.cs" />
+    <Compile Include="data\BaseConverter.cs" />
+    <Compile Include="data\BptgKcConverter.cs" />
+    <Compile Include="data\ConverterManager.cs" />
+    <Compile Include="data\DataConverter.cs" />
+    <Compile Include="data\GpaBigConverter.cs" />
+    <Compile Include="data\GpaConverter.cs" />
+    <Compile Include="data\KCConverter.cs" />
+    <Compile Include="data\KCPikConverter.cs" />
+    <Compile Include="data\PrSLTMValvesConverter.cs" />
+    <Compile Include="data\ValvesConverter.cs" />
+    <Compile Include="Description\ScheduleBehavior.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Schedulers\EndpointsLauncher.cs" />
+    <Compile Include="Schedulers\ISchedulingEntity.cs" />
+    <Compile Include="Schedulers\Import.cs" />
+    <Compile Include="Schedulers\SchedulingEntity.cs" />
+    <Compile Include="Schedulers\Export.cs" />
+    <Compile Include="Schedulers\More.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HG.Base\HG.Base.csproj">
+      <Project>{AF2EE980-0909-4FB4-B54C-E018A92E2AD2}</Project>
+      <Name>HG.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sofia.Connect\Sofia.Connect.csproj">
+      <Project>{957BCF33-884A-444E-BF59-771958BAE999}</Project>
+      <Name>Sofia.Connect</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sofia.Contracts\Sofia.Contracts.csproj">
+      <Project>{11AE93AF-1C56-4739-B9C8-B75867938B33}</Project>
+      <Name>Sofia.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sofia.Data\Sofia.Data.csproj">
+      <Project>{7E17DD20-4196-4309-9D91-6594251D46D9}</Project>
+      <Name>Sofia.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sofia.Domain.Setting\Sofia.Domain.Setting.csproj">
+      <Project>{A7CF3C04-261C-450B-9442-C4D49ADF59AE}</Project>
+      <Name>Sofia.Domain.Setting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sofia.Dto\Sofia.Dto.csproj">
+      <Project>{0B7790F1-2685-4259-A7E2-37F24648D07E}</Project>
+      <Name>Sofia.Dto</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="PSI_API">
+      <Guid>{A0D78B5F-A571-43C3-992B-9C3440C435CC}</Guid>
+      <VersionMajor>6</VersionMajor>
+      <VersionMinor>2</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,97 @@
+﻿@using Telerik.Web.Mvc.UI
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+@(Html.Telerik().StyleSheetRegistrar()
+       .DefaultGroup(group => group.DefaultPath("~/Content")
+                                  .Add("2011.3.1115/telerik.common.min.css")
+                                      .Add("2011.3.1115/telerik.sunset.min.css")
+       ))
+</head>
+    <body>
+@(Html.Telerik().Menu().Items(x =>
+                                  {
+                                      x.Add().Action("Index", "General").Text("Диспетчер задач, настройка");
+                                      x.Add().Action("Index", "Training").Text("Настройка для передачи оп. данных");
+                                      x.Add().Action("LoadFile", "General").Text("Загрузка данных");
+                                  }).Name("menu"))
+                                  
+   <div id="page">
+        <div id="main">
+                @{Html.Telerik().Splitter().Name("MainSplitter")
+                    .HtmlAttributes(new { style = "height: 300px;" })
+                    .Orientation(SplitterOrientation.Vertical)
+                    .Panes(vPanes =>
+                    {
+                        vPanes.Add()
+                            .Size("50px")
+                            @* Added the following HTML styles to allow the menu to display over top of all other div's.
+                             * overflow:visible - needed for Firefox 3.x and IE 8.
+                             * position:absolute; z-index:100; - needed for IE 7.
+                             *@
+                            .HtmlAttributes(new { style = "overflow:visible; position:absolute; z-index:100;" })
+                            .Collapsible(false)
+                            .Resizable(false)
+                            .Scrollable(false)
+                            .Content(
+                                @<text>
+                                    <div class="splitterContent" style="width:100%;"><h3>@ViewBag.Title</h3></div>
+                                </text>
+                            );
+
+                        vPanes.Add()
+                            .Scrollable(false)
+                            .Content(Html.Telerik().Splitter().Name("InnerSplitter")
+                                .HtmlAttributes(new { style = "height: 100%; width: 100%; border: 0; overflow: hidden;" })
+                                .Orientation(SplitterOrientation.Horizontal)
+                                .ClientEvents(events => events.OnResize("Layout.InnerSplitter_OnResize"))
+                                .Panes(hPanes =>
+                                {
+        @*                            hPanes.Add()
+                                        .Size("250px")
+                                        .Collapsible(true)
+                                        .Content(@<h2>Navigation Here</h2>);*@
+
+                                    hPanes.Add()
+                                        .Content(@<div class="splitterContent">@RenderBody()</div>);
+                                }).ToString());
+
+                        vPanes.Add()
+                            .Size("25px")
+                            .Collapsible(false)
+                            .Resizable(false)
+                            .Scrollable(false)
+                            .Content(@<div class="splitterContent"></div>);
+                    })
+                    .Render();
+                }
+        </div>
+
+    </div>
+        @{
+        Html.Telerik().ScriptRegistrar()
+            .DefaultGroup(group =>
+                group.Add("~/Scripts/2011.3.1115/observer.js")
+            )
+            .Scripts(scripts =>
+                scripts.AddGroup("LayoutGroup", group =>
+                    group.Add("~/Scripts/Layout.js")
+                         .Add("~/Scripts/2011.3.1115/telerik.extensions.js")
+                )
+            )
+            .OnDocumentReady(
+                @<text>
+                    Layout.Init();
+                </text>
+            );
+    }
+        @(Html.Telerik().ScriptRegistrar().DefaultGroup(group => group.DefaultPath("~/Scripts/2011.3.1115")).Globalization(true))
+
+    </body>
+</html>

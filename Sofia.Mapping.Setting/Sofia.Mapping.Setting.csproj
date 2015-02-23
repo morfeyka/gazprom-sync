@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8078B143-7762-4989-8A94-455C05D904E4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sofia.Mapping.Setting</RootNamespace>
+    <AssemblyName>Sofia.Mapping.Setting</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NHibernate">
+      <HintPath>..\HG.Base\bin\Debug\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Appointment\MaintenanceMap.cs" />
+    <Compile Include="Appointment\Periodicity\DailyFrequencyMap.cs" />
+    <Compile Include="Appointment\Periodicity\MonthlyFrequencyMap.cs" />
+    <Compile Include="Appointment\Periodicity\SheduleFrequencyPropertyMap.cs" />
+    <Compile Include="Appointment\Periodicity\SingleLanchFrequencyMap.cs" />
+    <Compile Include="Appointment\Periodicity\WeeklyFrequencyMap.cs" />
+    <Compile Include="Appointment\Sheduling\ImportShedulingMap.cs" />
+    <Compile Include="Appointment\Sheduling\ShedulerMap.cs" />
+    <Compile Include="Appointment\Sheduling\ExportShedulingMap.cs" />
+    <Compile Include="Appointment\Sheduling\MoreShedulingMap.cs" />
+    <Compile Include="EntityMapper.cs" />
+    <Compile Include="Log\StatusTaskMap.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Training\IdsForTrainingMap.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HG.Base\HG.Base.csproj">
+      <Project>{AF2EE980-0909-4FB4-B54C-E018A92E2AD2}</Project>
+      <Name>HG.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sofia.Domain.Setting\Sofia.Domain.Setting.csproj">
+      <Project>{A7CF3C04-261C-450B-9442-C4D49ADF59AE}</Project>
+      <Name>Sofia.Domain.Setting</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

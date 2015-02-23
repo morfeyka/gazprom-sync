@@ -1,0 +1,132 @@
+﻿@using Telerik.Web.Mvc.UI
+@{
+    ViewBag.Title = "Загрузка данных из файла в базу";
+    Layout = "~/Areas/Admin/Views/Shared/MasterPage.cshtml";
+}
+
+<script type="text/javascript" >
+    var CountSheet = 0;
+    settings = "nedviginKeys";
+    function onSuccess(e) {
+              
+        if (e.operation == "upload") {
+            CountSheet = e.response.CountSheet;
+            var itemSett = JSON.parse(localStorage.getItem(settings));
+            for (var i = e.response.CountSheet; i > -1; i--) {
+                $('#IndexTabStrip').data('tTabStrip').removeTab(i);
+            }
+            for (var i = 0; i < e.response.CountSheet; i++) {
+                $('#IndexTabStrip').data('tTabStrip').addTab({ text: e.response.SheetNames[i], html: e.response.SheetBody[i] });
+            }
+            $("#IndexTabStrip tbody tr:first-child").each(function (index) {
+                var indexTab = index;
+                $(this).find("td").each(function () {
+                    $(this).append("&nbsp;[K:<input  name='key" + indexTab + "' value='" + $(this).attr("data-xls") + "'  type='radio'></input>V:<input name='val" + indexTab + "' value='" + $(this).attr("data-xls") + "' type='radio'></input>]");
+                });
+            });
+            if (itemSett != undefined)
+                for (var j = 0; j < e.response.CountSheet; j++) {
+                    var finded = jQuery.grep(itemSett, function(a) { return a.Index == (j + 1); });
+                    $(finded).each(function() {
+                        $("#IndexTabStrip-" + (j + 1) + " tbody tr:first-child td input[name*=key][value="+this.Key+"]").attr('checked', 'checked');
+                        $("#IndexTabStrip-" + (j + 1) + " tbody tr:first-child td input[name*=val][value=" + this.Val + "]").attr('checked', 'checked');
+                    });
+                }
+
+                $("#inBase").removeAttr("disabled");
+//            $("#IndexTabStrip tbody tr:first-child td").delegate("input", "click", function() {
+////                if ($(this).parent().parent().find("input:radio:checked").length > 2) {
+////                    alert("Вы неможете выбрать больше двух столбцов, снимите уже установленные флажки");
+////                    return false;
+////                }
+//                if ($("input[name*=key][name*=val]:radio:checked").length > 2) {
+//                    $("#inBase").removeAttr("disabled");
+//                } else {
+//                    $("#inBase").attr("disabled", 'disabled');
+//                }
+//            });
+        }
+    }
+</script>
+<button id="clearVK" class="t-button"  >Очистить пары ключ/значение</button>
+<div>
+@(Html.Telerik().Upload()
+       .Name("attachments")
+       .Multiple(false)
+       .Async(async => async
+                           .Save("Save", "General")
+                           .Remove("Remove", "General")
+                           .AutoUpload(false)
+      ).ClientEvents(e => e.OnSuccess("onSuccess"))) 
+    <button disabled="disabled" id="inBase" class="t-button"  >Выгрузить в базу</button>
+    @(Html.Telerik().TabStrip()
+    .Name("IndexTabStrip")
+    .Items(tabstrip =>
+    {
+        tabstrip.Add()
+            .Text("T")
+            .Selected(false)
+            .Content(
+                @<text>
+                </text>
+            );
+    })
+)
+</div>
+@{
+    Html.Telerik().ScriptRegistrar()
+        .Scripts(scripts =>
+            scripts.AddGroup("IndexGroup", group =>
+                group.Add("~/Scripts/Index.js")
+            )
+        )
+        .OnDocumentReady(
+            @<text>
+                 $("#clearVK").click(function(){
+                    $("input:radio:checked").attr("checked",false);
+                 });
+                 Index.Init();
+                 $("#inBase").click(function(){
+                 if($("input:radio:checked").length>1)
+                 {
+                 var send = [], settings = "nedviginKeys"
+                 $("#IndexTabStrip tbody tr:first-child").parent().each(function(index){
+                     if($(this).find("input[name*=key]:radio:checked").length==1&& $(this).find("input[name*=val]:radio:checked").length==1)
+                 {
+                        var sheetindex =$(this).parent().parent()[0].id.replace('IndexTabStrip-','')
+                        var object = new Object();
+                         object.Index =sheetindex;
+                        object.Key =$(this).find("input[name*=key]:radio:checked").val();
+                        object.Val =$(this).find("input[name*=val]:radio:checked").val();
+                        send.push(object);
+                 }
+                 });
+                 localStorage.removeItem(settings);
+                 localStorage.setItem(settings,JSON.stringify(send));
+                 $.ajax({
+                 url: '/Admin/General/InBase',
+                 type: "POST",
+                 contentType: "application/json; charset=utf-8",
+                 dataType: 'text json',
+                 data: JSON.stringify(send),
+                 cache: false,
+                 async:false,
+                 success: function (rates) {
+                 location = '/Admin/Training';
+                 },
+                 error: function(jqXhr, textStatus) {
+                 alert("Ошибка загрузки данных!");
+                 if(textStatus!=="abort") {
+                 alert("Ошибка загрузки данных!");
+                 }
+                 }
+                 });
+                 }else{
+                 alert("Не все столбцы выбраны!!!");
+                 $("#inBase").attr("disabled", 'disabled');
+                 }
+                 });
+             </text>
+        ).Globalization(true);
+}
+       

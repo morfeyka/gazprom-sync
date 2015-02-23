@@ -1,0 +1,22 @@
+﻿@using Telerik.Web.Mvc.UI
+@model IQueryable<Sofia.WebSite.Areas.Admin.Models.StatusTaskModel>
+@{
+    ViewBag.Title = "Отчет о выполении задачи";
+    Layout = "~/Areas/Admin/Views/Shared/MasterPage.cshtml";
+}
+        <div>
+            
+            @(Html.Telerik().Grid<Sofia.WebSite.Areas.Admin.Models.StatusTaskModel>().BindTo(Model).Name("grid").Columns(c =>
+                                                                                                                {
+                                                                                                                    c.Bound(x => x.Id).Title("Id");
+                                                                                                                    c.Bound(x => x.ShedulerName).Title("Имя задачи"); ;
+                                                                                                                    c.Bound(x => x.StartRun).Title("Старт");
+                                                                                                                    c.Bound(x => x.EndRun).Title("Стоп");
+                                                                                                                    c.Bound(x => x.Duration).Title("Длительность");
+                                                                                                                    c.Bound(x => x.TaskExecType).Title("Состояние");
+                                                                                                                    c.Bound(x => x.TotalRows).Title("Всего");
+                                                                                                                    c.Bound(x => x.ErrorRows).Title("Ошибочно");
+                                                                                                                    c.Bound(x => x.Error).Title("Сооб. об ошиб.");
+                                                                                                                })
+                  .Pageable(x=>x.PageSize(15)).Sortable(sort=>sort.OrderBy(x=>x.Add(y=>y.Id).Descending())).Filterable())
+        </div>

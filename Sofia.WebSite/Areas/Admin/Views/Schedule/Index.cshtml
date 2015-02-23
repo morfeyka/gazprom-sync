@@ -1,0 +1,581 @@
+﻿@using Telerik.Web.Mvc.UI
+@model Sofia.WebSite.Models.SchedulerModel
+@{
+    ViewBag.Title = "Настройка параметров задания";
+    Layout = "~/Areas/Admin/Views/Shared/MasterPage.cshtml";
+}
+        <style type="text/css">
+            .pnlHead fieldset
+            {
+                border-bottom:none;
+                border-left:none;
+                border-right:none;
+            }
+
+            .SchTable
+            {
+                border-collapse:separate;
+                white-space:nowrap;
+                width:100%;
+            }
+            .SchTable tr td.cap
+            {
+                padding:2px 2px 2px 20px;
+                width:130px;
+            }
+
+            .SchTable tr td.capInPln
+            {
+                padding:2px 0px 2px 0px;
+                width:130px;
+            }
+            .PnlTable
+            {
+                border-collapse:collapse;
+            }
+            .PnlTable tr td.cap,
+            .PnlTable tr td.capTop
+            {
+                padding:2px 2px 2px 0px;
+                width:130px;
+            }
+
+            .PnlTable tr td.capNoPnl
+            {
+                padding:2px 2px 2px 6px;
+                width:130px;
+            }
+
+            .PnlTable tr td.capTop
+            {
+                vertical-align:top;
+            }
+            .PnlTable tr td.valTop
+            {
+                vertical-align:top;
+                padding:0px 5px 0px 0px;
+            }
+
+            .PnlTable tr td.val
+            {
+                padding:2px 2px 2px 0px;
+            }
+
+            .PnlTable tr td.oth
+            {
+                padding:2px 0px 2px 7px;
+            }
+
+            .PnlTable tr td input[type="text"]
+            {
+                width:40px;
+                
+            }
+
+            .PnlTable tr td.valTop input[type="text"]
+            {
+                margin:0px 2px 0px 0px;
+            }
+            .PnlTable tr td input[type="checkbox"]
+            {
+                vertical-align:middle;
+            }
+            .PnlTable tr td input[type="checkbox"]
+            {
+                margin-left:0px;
+            }
+            .PnlTable tr td input[type="radio"]
+            {
+                vertical-align:bottom;
+                margin-left:0px;
+                margin-right:5px;
+            }
+            .PnlTable tr td table
+            {
+                border-collapse:collapse;
+            }
+
+            .PnlTable tr td table tr td
+            {
+                padding:2px 5px 2px 0px;
+            }
+
+            .PnlTable tr td table tr td select
+            {
+                margin:0px 4px 0px 0px;
+            }
+
+            .DlgAction
+            {
+                padding:10px 10px 10px 10px;
+            }
+
+            .DlgAction table.PnlTable tr td.cap
+            {
+                width:300px;
+            }
+
+            .DlgAction table.PnlTable tr td.val span
+            {
+                font-weight:bolder;
+            }
+
+            .DlgAction table.PnlTable tr td.val label
+            {
+                margin:3px 10px 3px 3px;
+            }
+
+            .prtcls
+            {
+                margin:10px 10px 10px 20px;
+                width:100%;
+            }
+
+            .prtcls table.ContentTable,
+            .prtcls table.PnlTable
+            {
+                border-collapse:collapse;
+                width:95%;
+            }
+
+            .prtcls table.ContentTable
+            {
+                margin-bottom:10px;
+            }
+
+            .prtcls table.ContentTable thead tr td
+            {
+                @*background: transparent url(_image.axd?i=header_bg.gif) repeat-x;*@
+                font-size:11px;
+                text-align:center;
+                border-bottom:0 none!important;
+                border:1px solid #a6bccb;
+                font-weight:bold;
+                color:Black;
+                padding:3px 3px 3px 3px;
+            }
+
+            .prtcls table.ContentTable tbody tr td.inh
+            {
+                border:1px solid #a6bccb;
+                padding:3px 5px 3px 5px;
+                text-align:center;
+            }
+
+        </style>
+        
+        <script type="text/javascript">
+            var sItem = function () {
+                return $("#IdService").data("tDropDownList");
+            };            
+            function typeChange(e) {
+            }
+            function scheduleTypeChange(e) {
+                
+                if (e.value==1) {
+                    $("#pnlOneOccurence").hide();
+                    $(".pnlHead").show();
+                } else {
+                    $(".pnlHead").hide();
+                    $("#pnlOneOccurence").show();
+                }
+            }
+
+            function ddlDateRhythmChange(e) {
+                if (e.value == 0) {
+                    $("#pnlDaily").show();
+                    $("#PnlWeekly").hide();
+                    $("#pnlMonthly").hide();
+                } else if (e.value == 1) {
+                    $("#pnlDaily").hide();
+                    $("#PnlWeekly").show();
+                    $("#pnlMonthly").hide();
+                } else {
+                    $("#pnlDaily").hide();
+                    $("#PnlWeekly").hide();
+                    $("#pnlMonthly").show();                    
+                }
+            }
+            function getTimePicker() {
+                var timePicker = $('#cTimeConst').data("tTimePicker");
+                return timePicker;
+            }
+            function enableTimePicker() {
+                getTimePicker().enable();
+            }
+            function disableTimePicker() {
+                getTimePicker().disable();
+            }
+            function getTimePicker() {
+                var timePicker = $('#cTimeConst').data("tTimePicker");
+                return timePicker;
+            }
+            function disableGrouprDailyFreq() {
+                enableTimePicker();
+                $("#SingleLanchPeriod").data("tTextBox").disable();
+                $('#StartingAt').data("tTimePicker").disable();
+                $('#EndingAt').data("tTimePicker").disable();
+                $("#OccursEvery").data("tDropDownList").disable();
+            }
+
+            function enableGrouprDailyFreq() {
+                disableTimePicker();
+                $("#SingleLanchPeriod").data("tTextBox").enable();
+                $('#StartingAt').data("tTimePicker").enable();
+                $('#EndingAt').data("tTimePicker").enable();
+                $("#OccursEvery").data("tDropDownList").enable();
+            }
+            function IsSingleLanchChange(e) {
+                var radioValue = $(this).val();
+                if ($(this).is(":checked") && radioValue == "False") {
+                    
+                    disableGrouprDailyFreq();
+                }
+                else {
+                    
+                    enableGrouprDailyFreq();
+                }
+            }
+
+            function disableGrouprMonthDetail() {
+                $("#DayOffset").data("tTextBox").enable();
+                $("#MonthlyPeriod").data("tTextBox").enable();
+                $("#ddlWeekPart").data("tDropDownList").disable();
+                $("#ddlWeeks").data("tDropDownList").disable();
+                $("#tbxMonthNumFor").data("tTextBox").disable();
+            }
+
+            function enableGrouprMonthDetail() {
+                $("#DayOffset").data("tTextBox").disable();
+                $("#MonthlyPeriod").data("tTextBox").disable();
+                $("#ddlWeekPart").data("tDropDownList").enable();
+                $("#ddlWeeks").data("tDropDownList").enable();
+                $("#tbxMonthNumFor").data("tTextBox").enable();
+            }
+            function rblMonthDetailChange(e) {
+                var radioValue = $(this).val();
+                if ($(this).is(":checked") && radioValue == "False") {
+                    disableGrouprMonthDetail();
+                }
+                else {
+                    enableGrouprMonthDetail();
+                }
+            }
+
+            function disableGrouprStopDetail() {
+                 $('#DurationTo').data("tDatePicker").enable();
+            }
+
+            function enableGrouprStopDetail() {
+                 $('#DurationTo').data("tDatePicker").disable();
+            }
+            function IsInfiniteChange() {
+                  var radioValue = $(this).val();
+                if ($(this).is(":checked") && radioValue == "False") {
+                    disableGrouprStopDetail();
+                }
+                else {
+                    enableGrouprStopDetail();
+                }
+            }
+            function createTable() {
+                $.ajax({
+                    url: '/Admin/Schedule/CreateTable',
+                    type: "POST",
+                    cache: false,
+                    async: false,
+                    success: function(msg) {
+                        if(msg) {
+                            alert("Таблицы созданы!");
+                        }else{
+                            alert("Во время создания таблиц произошла ошибка!");
+                        }
+                    },
+                    error: function(jqXhr, textStatus) {
+                        alert("Ошибка при запросе:" + textStatus);
+                    }
+                });
+            }
+            function Refresh() {
+                $.post("/admin/schedule/refresh", $("#signupform").serialize(),
+ function(data){
+     $("#Description").text(data);
+ }, "json");
+            }
+
+            function Init() {
+                @if(@Model.RblMonthDetail == false)
+                {
+                   <text> disableGrouprMonthDetail();</text>
+                } else
+                {
+                    <text> enableGrouprMonthDetail();</text>
+                }
+                @if(Model.IsSingleLanch==false)
+                {
+                    <text> disableGrouprDailyFreq();</text>
+                }else{
+                    <text> enableGrouprDailyFreq();</text>
+                }
+                @if(@Model.IsInfinite==false)
+                {
+                    <text> disableGrouprStopDetail();</text>
+                }else{
+                    <text> enableGrouprStopDetail();</text>
+                }
+            }
+        </script>   
+    @*    <input type="button" value="Создать таблицы" onclick="createTable()"/>*@
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "signupform" }))
+{
+    @Html.ValidationSummary(true)
+    <table class="ContentTable">
+        <tr>
+            <td class="captwo">Название</td>
+            <td class="val">@Html.TextBoxFor(x => x.Name, new { @class = "t-input",style="width:500px" }) @Html.HiddenFor(x => x.Id) @Html.HiddenFor(x => x.Type)</td>
+        </tr>
+    </table>
+
+    <table class="ContentTable" width="100%">
+        <tr>
+            <td class="cap">
+                Общие настройки
+                <div class="prtcls">
+                    <table class="ContentTable">
+                        <thead>
+                            <tr>
+                                <td> <label id="LitCreation">Дата создания</label></td>
+                                <td><label id="LitLastRun">Последний запуск</label></td>
+                                <td><label id="LitNextRun">Следующий запуск</label></td>
+                                <td><label id="LitIteration">Общее количество запусков</label></td>
+                                <td><label id="LitDuration">Длительность(с.)</label></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="inh"> <label id="LitCreateValue"> @Html.Raw(Model.CreatedOn)</label> </td>
+                                <td class="inh"><label id="LitLastrunValue" >@Html.Raw(Model.LastRun)</label></td>
+                                <td class="inh"><label id="LitNextrunValue" >@Html.Raw(Model.NextRun)</label></td>
+                                <td class="inh"><label id="LitIterationValue" >@Html.Raw(Model.Iteration)</label></td>
+                                <td class="inh"><label id="LitDurationValue" >@Html.Raw(Model.Duration)</label></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="PnlTable">
+                        <tr>
+                            <td class="inh"><label>Путь для хранения:</label>@Html.TextBoxFor(x => x.Param, new { Style = "width:400px", @class = "t-input" })</td>
+                            <td class="inh"><label>Дата/Время форм. данных:</label>@Html.Telerik().DateTimePickerFor(x=>x.TimeGetData).Format("dd.MM.yyyy HH:mm:ss").InputHtmlAttributes(new{Style="width:150px"})</td>
+                            <td class="inh"><label>Завершать через </label> @Html.Telerik().IntegerTextBoxFor(x => x.Runtime).Value(Model.Runtime).InputHtmlAttributes(new{Style="width:100px"}).MinValue(1).MaxValue(int.MaxValue).Spinners(true).EmptyMessage("?")<label>минут</label></td>                            
+                            <td class="inh"><label>Завершать по истечении времени?</label> @Html.CheckBoxFor(x => x.IsKill, new { Checked = "checked" })</td>
+                            <td class="cap"><label>Включено?</label>@Html.CheckBoxFor(x => x.IsEnabled, new { Checked = "checked" })</td>                  
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="cap">
+                Расписание выполнения
+                <div style="padding: 10px 2px 2px 23px; width: 100%;">
+                    <table class="PnlTable">
+                        <tr>
+                            <td class="capNoPnl"><label>Тип расписания</label></td>
+                            <td class="val">@(Html.Telerik().DropDownListFor(x => x.FrequencyType).Value(Model.FrequencyType.ToString())
+.BindTo(new SelectList((new[] { new { Id = 0, Name = "Выполнить один раз" }, new { Id = 1, Name = "Периодическое выполнение" } }), "Id", "Name", Model.FrequencyType))
+.ClientEvents(x => x.OnChange("scheduleTypeChange")).Value(Model.FrequencyType.ToString()).HtmlAttributes(new{style="width:220px"}))</td>
+                        </tr>
+                    </table></div>
+                <table class="SchTable" >
+                    <tr>
+                        <td class="cap" colspan="2">
+                            <fieldset id="pnlOneOccurence" style="padding-left: 5px;@(Model.FrequencyType == 1 ? "display: none" : "string.Empty")" >
+                                <table class="SchTable">
+                                    <tr>
+                                        <td class="capInPln"><label id="LitDate">Дата</label></td>
+                                        <td class="val">@(Html.Telerik().DateTimePickerFor(x => x.cDate))</td>
+                                    </tr>
+                                    <tr><td colspan="2">Дата и время однократного выполнения должны располагаться после текущих даты и времени</td></tr>
+                                </table>
+                            </fieldset>
+                            <fieldset id="pnlReccurs" class="pnlHead" style="@(Model.FrequencyType == 0 ? "display: none" : "string.Empty")">
+                                <legend>Частота</legend>
+                                <table class="SchTable">
+                                    <tr>
+                                        <td class="capInPln"><label id="LitOccurs">Выполняется:</label></td>
+                                        <td class="val">@(Html.Telerik().DropDownListFor(x => x.ddlDateRhythm).Value(Model.ddlDateRhythm.ToString())
+              .BindTo(new SelectList((new[] { new { Id = 0, Name = "Ежедневно" }, new { Id = 1, Name = "Еженедельно" }, new { Id = 2, Name = "Ежемесячно" } }), "Id", "Name", Model.ddlDateRhythm)).ClientEvents(x => x.OnChange("ddlDateRhythmChange")).Value(Model.ddlDateRhythm.ToString()))
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="capInPln" colspan="2">
+                                            <fieldset id="pnlDaily" style="width: 600px;@(Model.ddlDateRhythm == 0 ? "string.Empty" : "display: none")">
+                                                <table class="PnlTable">
+                                                    <tr>
+                                                        <td class="cap"><label id="LitReccursEvery">Повторяется каждые: </label></td>
+                                                        <td class="val">@(Html.Telerik().IntegerTextBoxFor(x => x.DailyPeriod).Value(Model.DailyPeriod).MinValue(1).MaxValue(100).NegativePatternIndex(1).Spinners(true).EmptyMessage("?"))</td>
+                                                        <td><label id="LitDays">дн.</label></td>
+                                                    </tr>
+                                                </table>
+                                            </fieldset>
+                                            <fieldset id="PnlWeekly" style="width: 600px;@(Model.ddlDateRhythm == 1 ? "string.Empty" : "display: none")" >
+                                                <table class="PnlTable">
+                                                    <tr>
+                                                        <td class="cap"><label id="LitReccursEveryFor">Повторяется каждые:</label></td>
+                                                        <td colspan="4" class="val">
+                                                            @(Html.Telerik().IntegerTextBoxFor(x => x.WeeklyPeriod).Value(Model.WeeklyPeriod).MinValue(1).MaxValue(100).NegativePatternIndex(1).Spinners(true).EmptyMessage("?"))<label>нед.</label>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td rowspan="2" class="cap"></td>
+                                                        <td class="val">@Html.CheckBoxFor(x => x.Monday)<label>1. Понедельник</label></td>
+                                                        <td class="oth">@Html.CheckBoxFor(x => x.Wednesday)<label>3. Среда</label></td>
+                                                        <td class="oth">@Html.CheckBoxFor(x => x.Friday)<label>5. Пятница</label></td>
+                                                        <td class="oth">@Html.CheckBoxFor(x => x.Saturday)<label>6. Cуббота</label></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="val">@Html.CheckBoxFor(x => x.Tuesday)<label>2. Втроник</label></td>
+                                                        <td class="oth">@Html.CheckBoxFor(x => x.Thursday)<label>4. Четверг</label></td>
+                                                        <td class="oth"></td>
+                                                        <td class="oth">@Html.CheckBoxFor(x => x.Sunday)<label>7. Воскресение</label></td>
+                                                    </tr>
+                                                </table>
+                                            </fieldset>
+                                            <fieldset id="pnlMonthly" style="width: 600px; @(Model.ddlDateRhythm == 2 ? "string.Empty" : "display: none")" >
+                                                <table class="PnlTable">
+                                                    <tr>
+                                                        <td rowspan="2" class="cap">
+                                                            @Html.RadioButtonFor(model => model.RblMonthDetail, "False", Model.RblMonthDetail == false ? new { Checked = "checked" } : null) День
+                                                            <br/>
+                                                            @Html.RadioButtonFor(model => model.RblMonthDetail, "True", Model.RblMonthDetail == true ? new { Checked = "checked" } : null) Каждый
+                                                        </td>
+                                                        <td class="val">
+                                                            <table>
+                                                                <tr>
+                                                                    <td>
+                                                                          @(Html.Telerik().IntegerTextBoxFor(x => x.DayOffset).Value(Model.DayOffset).MinValue(1).MaxValue(31).NegativePatternIndex(1).Spinners(true).EmptyMessage("?"))
+                                                                        <label>каждых</label>
+                                                                    </td>
+                                                                    <td>  @(Html.Telerik().IntegerTextBoxFor(x => x.MonthlyPeriod).Value(Model.MonthlyPeriod).MinValue(1).MaxValue(99).NegativePatternIndex(1).Spinners(true).EmptyMessage("?"))
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="val">
+                                                            <table>
+                                                                <tr>
+                                                                    <td>
+                                                                        @(Html.Telerik().DropDownListFor(x => x.ddlWeekPart).Value(Model.ddlWeekPart.ToString())
+                                                                              .BindTo(Model.WeekPartList).ClientEvents(x => x.OnChange("typeChange")).Value(Model.ddlWeekPart.ToString()))
+                                                                    </td>
+                                                                    <td> @(Html.Telerik().DropDownListFor(x => x.ddlWeeks).Value(Model.ddlWeeks.ToString())
+              .BindTo(Model.DayOfWeekList).ClientEvents(x => x.OnChange("typeChange")).Value(Model.ddlWeeks.ToString()))
+                                                                        <label id="LitOfEveryFor">каждых</label>
+                                                                    </td>
+                                                                    <td> @(Html.Telerik().IntegerTextBoxFor(x => x.tbxMonthNumFor).Value(Model.tbxMonthNumFor).MinValue(1).MaxValue(99).NegativePatternIndex(1).Spinners(true).EmptyMessage("?"))
+                                                                        <label id="LitMonthFor">мес.</label>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </fieldset>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="cap" colspan="2">
+                            <fieldset id="pnlTimeProperty" class="pnlHead" style="@(Model.FrequencyType == 0 ? "display: none" : "string.Empty")">
+                                <legend>Сколько раз в день</legend>
+                                <table class="PnlTable">
+                                    <tr>
+                                        <td class="capTop" rowspan="2">
+                                            @Html.RadioButtonFor(model => model.IsSingleLanch, "False", Model.IsSingleLanch == false ? new { Checked = "checked" } : null) Однократное задание:
+                                            <br/>
+                                            @Html.RadioButtonFor(model => model.IsSingleLanch, "True", Model.IsSingleLanch == true ? new { Checked = "checked" } : null) Выполняется каждые.:
+                                        </td>
+                                        <td class="val"> @Html.Telerik().TimePickerFor(x => x.cTimeConst).Format("HH:mm:ss").ShowButton(true).InputHtmlAttributes(new { style = "width:100px" })</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="val">
+                                            <table>
+                                                <tr>
+                                                    <td rowspan="2" style="vertical-align: top;">@Html.Telerik().IntegerTextBoxFor(x => x.SingleLanchPeriod).MaxValue(100).MinValue(1).EmptyMessage("?")</td>
+                                                    <td rowspan="2" style="vertical-align: top;"> @(Html.Telerik().DropDownListFor(x => x.OccursEvery).Value(Model.OccursEvery.ToString())
+              .BindTo(Model.RhythmByTimeList).ClientEvents(x => x.OnChange("typeChange")).Value(Model.OccursEvery.ToString()))
+                                                    </td>
+                                                    <td> <label id="LitStartingAt">Начиная с:</label></td>
+                                                    <td>
+                                                        @Html.Telerik().TimePickerFor(x => x.StartingAt).Format("HH:mm:ss").ShowButton(true).InputHtmlAttributes(new { style = "width:100px" })
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><label id="LitEndingAt">Завершается в:</label></td>
+                                                    <td>@Html.Telerik().TimePickerFor(x => x.EndingAt).Format("HH:mm:ss").ShowButton(true).InputHtmlAttributes(new { style = "width:100px" })
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="cap" colspan="2">
+                            <fieldset id="pnlDuration" class="pnlHead" style="@(Model.FrequencyType == 0 ? "display: none" : "string.Empty")">
+                                <legend>Продолжительность</legend>
+                                <table class="PnlTable">
+                                    <tr>
+                                        <td class="capTop"><label id="LitStartDate">Дата начала:</label></td>
+                                        <td class="valTop">@Html.Telerik().DatePickerFor(x => x.DurationFrom).ShowButton(true).InputHtmlAttributes(new { style = "width:100px" })</td>
+                                        <td class="valTop">
+                                            @Html.RadioButtonFor(model => model.IsInfinite, "False", Model.IsInfinite == false ? new { Checked = "checked" } : null) Дата окончания:
+                                            <br/>
+                                            @Html.RadioButtonFor(model => model.IsInfinite, "True", Model.IsInfinite == true ? new { Checked = "checked" } : null) Без даты окончания:                                                    
+                                        </td>
+                                        <td class="valTop">@Html.Telerik().DatePickerFor(x => x.DurationTo).ShowButton(true).InputHtmlAttributes(new { style = "width:100px" })</td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </td>
+                    </tr>
+                </table>
+                <div style="padding: 10px 2px 2px 23px;">
+                    <table class="PnlTable">
+                        <tr>
+                            <td class="capNoPnl" style="vertical-align: top;"><label>Описание:</label></td>
+                            <td class="val">
+                                @Html.TextAreaFor(x => x.Description, 3, 1, new { Style = "width:400px", @class = "t-input" })
+                            </td>
+                            <td style="vertical-align: top;"><input class="t-button t-state-default" type="button" onclick="Refresh()" value="Обновить"/></td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="cap">
+            </td>
+        </tr>
+    </table>
+    <table class="ContentTable">
+        <tr>
+            <td class="cap" align="left" style="padding: 7px 0 0 0;">
+                <input class="t-button t-state-default" type="submit" value="Сохранить"/>
+            </td>
+        </tr>
+    </table>
+}
+        @{ Html.Telerik().ScriptRegistrar().OnDocumentReady(@<text>
+                                                                                                                                   $("input[name='IsSingleLanch']").change(IsSingleLanchChange);  
+                                                                                                                                   $("input[name='RblMonthDetail']").change(rblMonthDetailChange);
+                                                                                                                                   $("input[name='IsInfinite']").change(IsInfiniteChange);  
+                                                                                                                                   Init();
+                                                                                                                               </text>
+        ); }

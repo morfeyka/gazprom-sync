@@ -1,0 +1,72 @@
+﻿@using Sofia.Dto
+@using Telerik.Web.Mvc.UI
+@model IQueryable<Sofia.Dto.SchedulerDto>
+@{
+    ViewBag.Title = "Диспетчер задач, настройка расписания";
+    Layout = "~/Areas/Admin/Views/Shared/MasterPage.cshtml";
+}
+        <script type="text/javascript" >
+            function OnChange(e) {
+                $("#create").attr("href", "/Admin/Schedule?type=" + e.value);
+            }
+            function KillShedule(e) {
+                $.ajax({
+                    url: '/Admin/General/KillShedule',
+                    type: "POST",
+                    cache: false,
+                    async: false,
+                    data: { id: e },
+                    success: function (msg) {
+                        if (msg) {
+                            alert("Остановлен");
+                        } else {
+                            alert("Возможно сервис не доступен, или произошла ошибка");
+                        }
+                    },
+                    error: function (jqXhr, textStatus) {
+                        alert("Ошибка при запросе:" + textStatus);
+                    }
+                });
+            }
+        </script>
+@(Html.ActionLink("Создать", "Index", "Schedule", new { id = string.Empty, area="Admin", type = "import" }, new{ id="create", @class="t-button"}))
+ @(Html.Telerik().DropDownList().Name("typeTask")
+      .BindTo(new SelectList((new[] { new { Id = "import", Name = "Выгрузка для Vesta" }, new { Id = "more", Name = "Журнал диспетчера " }, new { Id = "export", Name = "Диагностика " } }), "Id", "Name", "import"))
+       //    .BindTo(new SelectList((new[] { new { Id = "more", Name = "Формирование данных" } }), "Id", "Name", "more"))
+       .ClientEvents(x=>x.OnChange("OnChange")).DropDownHtmlAttributes(new{style="width:200px"}).HtmlAttributes(new{style="width:200px"}))
+       @if (ViewBag.IsService)
+       {
+           <div>Сервис доступен</div> 
+       }else
+       {
+           <div>Сервис не доступен</div> 
+       }
+       
+            @(Html.Telerik().Grid<Sofia.Dto.SchedulerDto>().BindTo(Model).Name("grid").Columns(c =>
+        {
+            c.Bound(x => x.Id).Title("Id").Hidden();
+            c.Bound(x => x.Name).Title("Имя расписания");
+            c.Bound(x => x.Type).Title("Тип задачи");
+            c.Bound(x => x.CountLaunches).Title("Кол-во пусков");
+            c.Bound(x => x.LastDuration).Title("Дл-ность (с.)");
+            c.Bound(x => x.LastRun).Title("Последний запуск");
+            c.Bound(x => x.NextRun).Title("Следующий запуск");
+            c.Bound(x => x.State).Title("Состояние");
+            c.Bound(x => x.Id).Filterable(false).Template(@<text>
+                                                                                                                                        @if (item.State == TaskExecutionType.Running)
+                                                                                                                                        {
+                                                                                                                                            <input type="button" class="t-button" value="Завершить" onclick="KillShedule(@(item.Id))" />
+                                                                                                                                        }
+                                                                                                                                    </text>).Title("Операция");
+            c.Bound(x => x.Id).Filterable(false).Template(@<text>
+                                                                                                                                        <a class="t-button t-grid-edit" href='/Admin/Schedule?type=@(item.Type)&id=@(item.Id)'>Ред-ть</a>
+                                                                                                                                    </text>).Title(" ");
+            c.Bound(x => x.Id).Filterable(false).Template(@<text>
+                                                                                                                                        <a class="t-button" href='/Admin/StatusLog?id=@(item.Id)'>Журнал</a>
+                                                                                                                                    </text>).Title(" ");
+        }).Pageable(x => x.PageSize(15)).Sortable().Filterable()
+                                                                                                                                                                                                                                       )                                   
+            @{ Html.Telerik().ScriptRegistrar().DefaultGroup(group => group.DefaultPath("~/Scripts/2011.3.1115")).OnDocumentReady(@<text>
+
+                                                                                                                               </text>
+        ); }
