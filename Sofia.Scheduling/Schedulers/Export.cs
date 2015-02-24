@@ -70,6 +70,7 @@ namespace Sofia.Scheduling.Schedulers
                                         internalTag);
                                     using (NpgsqlCommand command=new NpgsqlCommand(sql,connection))
                                     {
+                                        connection.Open();
                                         using (NpgsqlDataReader reader=command.ExecuteReader())
                                         {
                                             if (reader.HasRows)
