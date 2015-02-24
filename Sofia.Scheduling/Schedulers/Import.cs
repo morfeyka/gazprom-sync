@@ -50,7 +50,7 @@ namespace Sofia.Scheduling.Schedulers
                     strUser = System.Configuration.ConfigurationManager.AppSettings["psiLogin"],
                     strPassword = System.Configuration.ConfigurationManager.AppSettings["psiPassword"],
                     strUserClass = System.Configuration.ConfigurationManager.AppSettings["psiUserClass"],
-                    strView = System.Configuration.ConfigurationManager.AppSettings["psidisplay"]
+                    strView = System.Configuration.ConfigurationManager.AppSettings["psiView"]
                 };
                 api.vbLogin(loginInfo);
 

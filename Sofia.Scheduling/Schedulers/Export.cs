@@ -1,5 +1,7 @@
 using System;
-using System.Threading;
+using System.Data.OleDb;
+using Npgsql;
+using System.Configuration;
 using PSI_API;
 using Sofia.Data;
 using Sofia.Data.Logic;
@@ -29,26 +31,77 @@ namespace Sofia.Scheduling.Schedulers
             var status = session.Get<StatusTask>((int)idTaskStatus);
             try
             {
-                try
+
+                cls_IPSIAPI api = new PSI_API.cls_IPSIAPIClass();
+                var loginInfo = new typLoginInfo
                 {
-                    cls_IPSIAPI api = new PSI_API.cls_IPSIAPIClass();
-                    var loginInfo = new typLoginInfo
+                    strUser = ConfigurationManager.AppSettings["psiLogin"],
+                    strPassword = ConfigurationManager.AppSettings["psiPassword"],
+                    strUserClass = ConfigurationManager.AppSettings["psiUserClass"],
+                    strView = ConfigurationManager.AppSettings["psiView"]
+                };
+                api.vbLogin(loginInfo);
+
+
+                using (OleDbConnection excelConnection = new OleDbConnection(String.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0}; Extended Properties=Excel 12.0;", ConfigurationManager.AppSettings["eitpConfigFile"])))
+                {
+                 
+                    excelConnection.Open();
+
+                    using (OleDbCommand excelCommand = new OleDbCommand(String.Format("select * from [{0}$]",ConfigurationManager.AppSettings["configSheetName"]),excelConnection))
                     {
-                        strUser = System.Configuration.ConfigurationManager.AppSettings["psiLogin"],
-                        strPassword = System.Configuration.ConfigurationManager.AppSettings["psiPassword"],
-                        strUserClass = System.Configuration.ConfigurationManager.AppSettings["psiUserClass"],
-                        strView = System.Configuration.ConfigurationManager.AppSettings["psidisplay"]
-                    };
-                    api.vbLogin(loginInfo);
-                    String timerTag = String.Format(@"SY.SNMP.{0}.PKOPET...TIMER",System.Configuration.ConfigurationManager.AppSettings["lpuKey"]);
-                    api.vbSetPAValue(ref timerTag, new typeValue { Wert = 1 });
-                } catch(Exception) {}
-                
+                        using (OleDbDataReader excelReader=excelCommand.ExecuteReader())
+                        {
+                            while (excelReader.Read())
+                            {
+                                String pbTag = excelReader.GetString(5) +
+                                               ConfigurationManager.AppSettings["pbTagSuffix"];
+                                String pTag = excelReader.GetString(5) + ConfigurationManager.AppSettings["ptagSuffix"];
+                                String qTag = excelReader.GetString(5) + ConfigurationManager.AppSettings["qTagSuffix"];
+                                String tTag = excelReader.GetString(5) + ConfigurationManager.AppSettings["tTagSuffix"];
+
+                                String internalTag = excelReader.GetString(1);
+                                if (String.IsNullOrEmpty(internalTag)) continue;
 
 
+                                using (NpgsqlConnection connection = new NpgsqlConnection(ConfigurationManager.ConnectionStrings["eitp"].ConnectionString))
+                                {
+                                    String sql = String.Format(ConfigurationManager.AppSettings["eitpRTsql"],
+                                        internalTag);
+                                    using (NpgsqlCommand command=new NpgsqlCommand(sql,connection))
+                                    {
+                                        using (NpgsqlDataReader reader=command.ExecuteReader())
+                                        {
+                                            if (reader.HasRows)
+                                            {
+                                                reader.Read();
+                                                if (reader.GetValue(1) != DBNull.Value)
+                                                {
+                                                    api.vbSetPAValue(pbTag,new typeValue{Wert = Double.Parse(reader.GetString(1)),Zeit = reader.GetDateTime(0)});
+                                                }
+                                                if (reader.GetValue(2) != DBNull.Value)
+                                                {
+                                                    api.vbSetPAValue(pTag, new typeValue { Wert = Double.Parse(reader.GetString(2)), Zeit = reader.GetDateTime(0) });
+                                                }
+                                                if (reader.GetValue(3) != DBNull.Value)
+                                                {
+                                                    api.vbSetPAValue(qTag, new typeValue { Wert = Double.Parse(reader.GetString(3)), Zeit = reader.GetDateTime(0) });
+                                                }
+                                                if (reader.GetValue(4) != DBNull.Value)
+                                                {
+                                                    api.vbSetPAValue(tTag, new typeValue { Wert = Double.Parse(reader.GetString(4)), Zeit = reader.GetDateTime(0) });
+                                                }
 
+                                            }
+                                        }                
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                api.vbLogout();
 
-                
                 session.Evict(status);
                 status = session.Get<StatusTask>(idTaskStatus);
                 status.TaskExecType = TaskExecType.Succeed;

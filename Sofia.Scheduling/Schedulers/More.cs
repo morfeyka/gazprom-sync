@@ -73,7 +73,7 @@ namespace Sofia.Scheduling.Schedulers
                     strUser = ConfigurationManager.AppSettings["psiLogin"],
                     strPassword = ConfigurationManager.AppSettings["psiPassword"],
                     strUserClass = ConfigurationManager.AppSettings["psiUserClass"],
-                    strView = ConfigurationManager.AppSettings["psidisplay"]
+                    strView = ConfigurationManager.AppSettings["psiView"]
                 };
                 api.vbLogin(loginInfo);
                 var timerTag = String.Format("SY.SNMP.{0}.PKOPET...TIMER", ConfigurationManager.AppSettings["lpuKey"]);
@@ -137,7 +137,7 @@ namespace Sofia.Scheduling.Schedulers
                     strUser = ConfigurationManager.AppSettings["psiLogin"],
                     strPassword = ConfigurationManager.AppSettings["psiPassword"],
                     strUserClass = ConfigurationManager.AppSettings["psiUserClass"],
-                    strView = ConfigurationManager.AppSettings["psidisplay"]
+                    strView = ConfigurationManager.AppSettings["psiView"]
                 };
                 api.vbLogin(loginInfo);
                 var errorTag = String.Format("SY.SNMP.{0}.PKOPET...ERROR", ConfigurationManager.AppSettings["lpuKey"]);
@@ -154,7 +154,7 @@ namespace Sofia.Scheduling.Schedulers
                 strUser = ConfigurationManager.AppSettings["psiLogin"],
                 strPassword = ConfigurationManager.AppSettings["psiPassword"],
                 strUserClass = ConfigurationManager.AppSettings["psiUserClass"],
-                strView = ConfigurationManager.AppSettings["psidisplay"]
+                strView = ConfigurationManager.AppSettings["psiView"]
             };
             globalApi.vbLogin(globalLoginInfo);
             var globalErrorTag = String.Format("SY.SNMP.{0}.PKOPET...ERROR", ConfigurationManager.AppSettings["lpuKey"]);
