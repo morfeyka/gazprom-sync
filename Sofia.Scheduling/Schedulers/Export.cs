@@ -78,19 +78,19 @@ namespace Sofia.Scheduling.Schedulers
                                                 reader.Read();
                                                 if (reader.GetValue(1) != DBNull.Value)
                                                 {
-                                                    api.vbSetPAValue(pbTag,new typeValue{Wert = Double.Parse(reader.GetString(1)),Zeit = reader.GetDateTime(0)});
+                                                    api.vbSetPAValue(pbTag,new typeValue{Wert = reader.GetDouble(1),Zeit = reader.GetDateTime(0)});
                                                 }
                                                 if (reader.GetValue(2) != DBNull.Value)
                                                 {
-                                                    api.vbSetPAValue(pTag, new typeValue { Wert = Double.Parse(reader.GetString(2)), Zeit = reader.GetDateTime(0) });
+                                                    api.vbSetPAValue(pTag, new typeValue { Wert = reader.GetDouble(2), Zeit = reader.GetDateTime(0) });
                                                 }
                                                 if (reader.GetValue(3) != DBNull.Value)
                                                 {
-                                                    api.vbSetPAValue(qTag, new typeValue { Wert = Double.Parse(reader.GetString(3)), Zeit = reader.GetDateTime(0) });
+                                                    api.vbSetPAValue(qTag, new typeValue { Wert = reader.GetDouble(3), Zeit = reader.GetDateTime(0) });
                                                 }
                                                 if (reader.GetValue(4) != DBNull.Value)
                                                 {
-                                                    api.vbSetPAValue(tTag, new typeValue { Wert = Double.Parse(reader.GetString(4)), Zeit = reader.GetDateTime(0) });
+                                                    api.vbSetPAValue(tTag, new typeValue { Wert = reader.GetDouble(4), Zeit = reader.GetDateTime(0) });
                                                 }
 
                                             }
