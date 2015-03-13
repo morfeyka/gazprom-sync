@@ -149,5 +149,5 @@ namespace Sofia.Scheduling.Schedulers
             session.Flush();
         }
     }
-    }
+    
 }
