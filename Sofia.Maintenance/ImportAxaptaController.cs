@@ -54,6 +54,20 @@ namespace Sofia.Maintenance
                     more.Completed += shedule_Completed;
                     _schedulers.Add(more);
                 }
+
+                if (shedule.Type == "eitp_hour")
+                {
+                    var more = new EitpHourlyJob(shedule.Id);
+                    more.Completed += shedule_Completed;
+                    _schedulers.Add(more);
+                }
+
+                if (shedule.Type == "eitp_daily")
+                {
+                    var more = new EitpDailyJob(shedule.Id);
+                    more.Completed += shedule_Completed;
+                    _schedulers.Add(more);
+                }
             }
         }
 

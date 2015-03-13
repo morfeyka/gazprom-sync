@@ -31,7 +31,7 @@
         </script>
 @(Html.ActionLink("Создать", "Index", "Schedule", new { id = string.Empty, area="Admin", type = "import" }, new{ id="create", @class="t-button"}))
  @(Html.Telerik().DropDownList().Name("typeTask")
-      .BindTo(new SelectList((new[] { new { Id = "import", Name = "Выгрузка для Vesta" }, new { Id = "more", Name = "Журнал диспетчера " }, new { Id = "export", Name = "Диагностика " } }), "Id", "Name", "import"))
+           .BindTo(new SelectList((new[] { new { Id = "import", Name = "Выгрузка для Vesta" }, new { Id = "more", Name = "Журнал диспетчера " }, new { Id = "export", Name = "Диагностика " }, new { Id = "eitp_hour", Name = "ЕИТП Часовой Срез " }, new { Id = "eitp_daily", Name = "ЕИТП Суточный Срез " } }), "Id", "Name", "import"))
        //    .BindTo(new SelectList((new[] { new { Id = "more", Name = "Формирование данных" } }), "Id", "Name", "more"))
        .ClientEvents(x=>x.OnChange("OnChange")).DropDownHtmlAttributes(new{style="width:200px"}).HtmlAttributes(new{style="width:200px"}))
        @if (ViewBag.IsService)

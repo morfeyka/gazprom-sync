@@ -14,7 +14,7 @@ using Sofia.Domain.Setting.Log;
 
 namespace Sofia.Scheduling.Schedulers
 {
-    class EitpDailyJob : SchedulingEntity<Sheduler>
+    public class EitpDailyJob : SchedulingEntity<Sheduler>
     {
         public EitpDailyJob(int id) : base(id)
         {
