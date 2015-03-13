@@ -1,8 +1,11 @@
-using System;
-using System.Data.OleDb;
-using System.Runtime.InteropServices;
-using Npgsql;
+п»їusing System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Data.OleDb;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using Npgsql;
 using PSI_API;
 using Sofia.Data;
 using Sofia.Data.Logic;
@@ -11,20 +14,11 @@ using Sofia.Domain.Setting.Log;
 
 namespace Sofia.Scheduling.Schedulers
 {
-    ///<summary>
-    ///Представляет описание задания формирования прайс-листов.
-    ///</summary>
-    public class Export : SchedulingEntity<Sheduler>
+    class EitpHourlyJob : SchedulingEntity<Sheduler>
     {
-        /// <summary>
-        /// Инициализирует экземпляр плана выполнения задания формирования прайс-листов с указанным идентификатором.
-        /// </summary>
-        /// <param name="id">Идентификатор задания.</param>
-        public Export(int id)
-            : base(id)
+        public EitpHourlyJob(int id) : base(id)
         {
         }
-
 
         public override void DoWork(object idTaskStatus)
         {
@@ -47,17 +41,17 @@ namespace Sofia.Scheduling.Schedulers
                 using (OleDbConnection excelConnection = new OleDbConnection(String.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0}; Extended Properties=Excel 12.0;", ConfigurationManager.AppSettings["eitpConfigFile"])))
                 {
 
-                    
-                    excelConnection.Open();
-                   
 
-                    using (OleDbCommand excelCommand = new OleDbCommand(String.Format("select * from [{0}$]",ConfigurationManager.AppSettings["configSheetName"]),excelConnection))
+                    excelConnection.Open();
+
+
+                    using (OleDbCommand excelCommand = new OleDbCommand(String.Format("select * from [{0}$]", ConfigurationManager.AppSettings["configSheetName"]), excelConnection))
                     {
-                        using (OleDbDataReader excelReader=excelCommand.ExecuteReader())
+                        using (OleDbDataReader excelReader = excelCommand.ExecuteReader())
                         {
                             while (excelReader.Read())
                             {
-                                if (excelReader.GetValue(5)==DBNull.Value) continue;
+                                if (excelReader.GetValue(5) == DBNull.Value) continue;
                                 String pbTag = excelReader.GetString(5) +
                                                ConfigurationManager.AppSettings["pbTagSuffix"];
                                 String pTag = excelReader.GetString(5) + ConfigurationManager.AppSettings["ptagSuffix"];
@@ -70,24 +64,18 @@ namespace Sofia.Scheduling.Schedulers
 
                                 using (NpgsqlConnection connection = new NpgsqlConnection(ConfigurationManager.ConnectionStrings["eitp"].ConnectionString))
                                 {
-                                    
+
                                     String sql = String.Format(ConfigurationManager.AppSettings["eitpRTsql"],
                                         internalTag);
                                     try
                                     {
                                         using (NpgsqlCommand command = new NpgsqlCommand(sql, connection))
                                         {
-                                            var tag = String.Format("SY.SNMP.{0}.PKOPET...LINK4", ConfigurationManager.AppSettings["lpuKey"]);
-                                            try
-                                            {
-                                                connection.Open();
+                                      
+                                             connection.Open();
 
-                                                api.vbSetPAValue(ref tag, new typeValue { Wert = 1 });
-                                            }
-                                            catch (Exception e)
-                                            {
-                                                api.vbSetPAValue(ref tag, new typeValue { Wert = 1 });
-                                            }
+                                              
+                                           
                                             using (NpgsqlDataReader reader = command.ExecuteReader())
                                             {
                                                 if (reader.HasRows)
@@ -95,7 +83,7 @@ namespace Sofia.Scheduling.Schedulers
                                                     reader.Read();
                                                     if (reader.GetValue(1) != DBNull.Value)
                                                     {
-                                                        api.vbSetPAValue(pbTag,
+                                                        api.vbSetStdValue(pbTag,"H",
                                                             new typeValue
                                                             {
                                                                 Wert = reader.GetDouble(1),
@@ -104,7 +92,7 @@ namespace Sofia.Scheduling.Schedulers
                                                     }
                                                     if (reader.GetValue(2) != DBNull.Value)
                                                     {
-                                                        api.vbSetPAValue(pTag,
+                                                        api.vbSetStdValue(pbTag, "H",
                                                             new typeValue
                                                             {
                                                                 Wert = reader.GetDouble(2),
@@ -113,7 +101,7 @@ namespace Sofia.Scheduling.Schedulers
                                                     }
                                                     if (reader.GetValue(3) != DBNull.Value)
                                                     {
-                                                        api.vbSetPAValue(qTag,
+                                                        api.vbSetStdValue(pbTag, "H",
                                                             new typeValue
                                                             {
                                                                 Wert = reader.GetDouble(3),
@@ -122,7 +110,7 @@ namespace Sofia.Scheduling.Schedulers
                                                     }
                                                     if (reader.GetValue(4) != DBNull.Value)
                                                     {
-                                                        api.vbSetPAValue(tTag,
+                                                        api.vbSetStdValue(pbTag, "H",
                                                             new typeValue
                                                             {
                                                                 Wert = reader.GetDouble(4),
