@@ -56,6 +56,8 @@
     <Compile Include="Appointment\Periodicity\SingleLanchFrequency.cs" />
     <Compile Include="Appointment\Periodicity\TimeSpanFrequency.cs" />
     <Compile Include="Appointment\Periodicity\WeeklyFrequency.cs" />
+    <Compile Include="Appointment\Sheduling\EitpDailyScheduling.cs" />
+    <Compile Include="Appointment\Sheduling\EitpHourScheduling.cs" />
     <Compile Include="Appointment\Sheduling\ExportSheduling.cs" />
     <Compile Include="Appointment\Sheduling\ImportSheduling.cs" />
     <Compile Include="Appointment\Sheduling\MoreSheduling.cs" />

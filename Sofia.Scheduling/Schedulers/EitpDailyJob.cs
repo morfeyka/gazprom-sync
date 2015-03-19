@@ -65,7 +65,7 @@ namespace Sofia.Scheduling.Schedulers
                                 using (NpgsqlConnection connection = new NpgsqlConnection(ConfigurationManager.ConnectionStrings["eitp"].ConnectionString))
                                 {
 
-                                    String sql = String.Format(ConfigurationManager.AppSettings["eitpRTsql"],
+                                    String sql = String.Format(ConfigurationManager.AppSettings["eitpDAYsql"],
                                         internalTag);
                                     try
                                     {
@@ -78,9 +78,11 @@ namespace Sofia.Scheduling.Schedulers
                                            
                                             using (NpgsqlDataReader reader = command.ExecuteReader())
                                             {
-                                                if (reader.HasRows)
+                                                while (reader.Read())
+                                                
+                                               
                                                 {
-                                                    reader.Read();
+                                                    
                                                     if (reader.GetValue(1) != DBNull.Value)
                                                     {
                                                         api.vbSetStdValue(pbTag,"D",
@@ -92,7 +94,7 @@ namespace Sofia.Scheduling.Schedulers
                                                     }
                                                     if (reader.GetValue(2) != DBNull.Value)
                                                     {
-                                                        api.vbSetStdValue(pbTag, "D",
+                                                        api.vbSetStdValue(pTag, "D",
                                                             new typeValue
                                                             {
                                                                 Wert = reader.GetDouble(2),
@@ -101,22 +103,14 @@ namespace Sofia.Scheduling.Schedulers
                                                     }
                                                     if (reader.GetValue(3) != DBNull.Value)
                                                     {
-                                                        api.vbSetStdValue(pbTag, "D",
+                                                        api.vbSetStdValue(tTag, "D",
                                                             new typeValue
                                                             {
                                                                 Wert = reader.GetDouble(3),
                                                                 Zeit = reader.GetDateTime(0)
                                                             });
                                                     }
-                                                    if (reader.GetValue(4) != DBNull.Value)
-                                                    {
-                                                        api.vbSetStdValue(pbTag, "D",
-                                                            new typeValue
-                                                            {
-                                                                Wert = reader.GetDouble(4),
-                                                                Zeit = reader.GetDateTime(0)
-                                                            });
-                                                    }
+                                                   
 
                                                 }
                                             }

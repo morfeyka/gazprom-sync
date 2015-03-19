@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HG.Base", "HG.Base\HG.Base.csproj", "{AF2EE980-0909-4FB4-B54C-E018A92E2AD2}"
 EndProject
@@ -26,8 +26,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Mapping.Setting", "Sofia.Mapping.Setting\Sofia.Mapping.Setting.csproj", "{8078B143-7762-4989-8A94-455C05D904E4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofia.Domain.Setting", "Sofia.Domain.Setting\Sofia.Domain.Setting.csproj", "{A7CF3C04-261C-450B-9442-C4D49ADF59AE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PgTest", "PgTest\PgTest.csproj", "{49EEFE28-EC04-4315-9888-EF23772FB9B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -159,16 +157,6 @@ Global
 		{A7CF3C04-261C-450B-9442-C4D49ADF59AE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{A7CF3C04-261C-450B-9442-C4D49ADF59AE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A7CF3C04-261C-450B-9442-C4D49ADF59AE}.Release|x86.ActiveCfg = Release|Any CPU
-		{49EEFE28-EC04-4315-9888-EF23772FB9B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{49EEFE28-EC04-4315-9888-EF23772FB9B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{49EEFE28-EC04-4315-9888-EF23772FB9B2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{49EEFE28-EC04-4315-9888-EF23772FB9B2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{49EEFE28-EC04-4315-9888-EF23772FB9B2}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{49EEFE28-EC04-4315-9888-EF23772FB9B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{49EEFE28-EC04-4315-9888-EF23772FB9B2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{49EEFE28-EC04-4315-9888-EF23772FB9B2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{49EEFE28-EC04-4315-9888-EF23772FB9B2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{49EEFE28-EC04-4315-9888-EF23772FB9B2}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

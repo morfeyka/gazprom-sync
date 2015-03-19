@@ -44,6 +44,8 @@
     <Compile Include="Appointment\Periodicity\SheduleFrequencyPropertyMap.cs" />
     <Compile Include="Appointment\Periodicity\SingleLanchFrequencyMap.cs" />
     <Compile Include="Appointment\Periodicity\WeeklyFrequencyMap.cs" />
+    <Compile Include="Appointment\Sheduling\EitpDailySchedulerMap.cs" />
+    <Compile Include="Appointment\Sheduling\EitpHourSchedulingMap.cs" />
     <Compile Include="Appointment\Sheduling\ImportShedulingMap.cs" />
     <Compile Include="Appointment\Sheduling\ShedulerMap.cs" />
     <Compile Include="Appointment\Sheduling\ExportShedulingMap.cs" />

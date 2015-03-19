@@ -42,6 +42,12 @@ namespace Sofia.WebSite.Areas.Admin.Controllers
                         case "export":
                             _shaper = new ExportSheduling();
                             break;
+                        case "eitp_hour":
+                            _shaper = new EitpHourScheduling();
+                            break;
+                        case "eitp_daily":
+                            _shaper = new EitpDailyScheduling();
+                            break;
                         default:
                             _shaper = new MoreSheduling();
                             break;
